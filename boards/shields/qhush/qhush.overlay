@@ -90,6 +90,11 @@
     status = "disabled";
 };
 
+// D6, D7ピンの シリアル通信(UART)機能を無効化してGPIOとして解放する
+&uart0 {
+    status = "disabled";
+};
+
 // D8, D9ピンの SPI通信機能を無効化してGPIOとして解放する
 &spi2 {
     status = "disabled";
