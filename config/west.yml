@@ -1,3 +1,3 @@
 build_config:
   - board: seeeduino_xiao_ble
-    shield: 25KEYS
+    shield: 25keys
