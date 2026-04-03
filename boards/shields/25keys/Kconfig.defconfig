@@ -1,0 +1,6 @@
+if SHIELD_25KEYS
+
+config ZMK_KEYBOARD_NAME
+    default "25keys"
+
+endif
