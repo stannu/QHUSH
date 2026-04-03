@@ -49,7 +49,6 @@
 };
 
 // XIAO BLEのデフォルト通信・センサー機能を「すべて」無効化し、ピンを完全解放する
-&adc0 { status = "disabled"; };
 &i2c0 { status = "disabled"; };
 &i2c1 { status = "disabled"; };
 &spi2 { status = "disabled"; };
