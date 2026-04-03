@@ -1,0 +1,6 @@
+if SHIELD_QHUSH
+
+config ZMK_KEYBOARD_NAME
+    default "qhush"
+
+endif

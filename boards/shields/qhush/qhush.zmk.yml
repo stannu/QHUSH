@@ -1,6 +1,6 @@
 file_format: "1"
-id: 25keys
-name: 25keys
+id: qhush
+name: QHUSH
 type: shield
 siblings:
-  - 25keys
+  - qhush

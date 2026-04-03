@@ -1,2 +1,0 @@
-config SHIELD_25KEYS
-    def_bool $(shields_list_contains,25keys)
