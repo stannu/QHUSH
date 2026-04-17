@@ -1,8 +1,11 @@
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <physical_layouts.dtsi>
+#include <dt-bindings/led/led.h>
 
 / {
     chosen {
-        zmk,kscan = &kscan0;
+        // zmk,kscan = &kscan0;
+        zmk,underglow = &led_strip;
         zmk,matrix-transform = &default_transform;
     };
 
@@ -24,26 +27,46 @@
         >;
     };
 
+    // ZMK Studioのための物理レイアウト定義
+    physical_layouts {
+        compatible = "zmk,physical-layouts";
+        default_layout: default_layout {
+            compatible = "zmk,physical-layout";
+            display-name = "Default Layout";
+            transform = <&default_transform>;
+            kscan = <&kscan0>;
+            
+            // 5x5の格子状にキーを配置 (100 = 1Uサイズ)
+            keys
+                = <&key_physical_attrs 100 100   0   0 0 0 0>, <&key_physical_attrs 100 100 100   0 0 0 0>, <&key_physical_attrs 100 100 200   0 0 0 0>, <&key_physical_attrs 100 100 300   0 0 0 0>, <&key_physical_attrs 100 100 400   0 0 0 0>
+                , <&key_physical_attrs 100 100   0 100 0 0 0>, <&key_physical_attrs 100 100 100 100 0 0 0>, <&key_physical_attrs 100 100 200 100 0 0 0>, <&key_physical_attrs 100 100 300 100 0 0 0>, <&key_physical_attrs 100 100 400 100 0 0 0>
+                , <&key_physical_attrs 100 100   0 200 0 0 0>, <&key_physical_attrs 100 100 100 200 0 0 0>, <&key_physical_attrs 100 100 200 200 0 0 0>, <&key_physical_attrs 100 100 300 200 0 0 0>, <&key_physical_attrs 100 100 400 200 0 0 0>
+                , <&key_physical_attrs 100 100   0 300 0 0 0>, <&key_physical_attrs 100 100 100 300 0 0 0>, <&key_physical_attrs 100 100 200 300 0 0 0>, <&key_physical_attrs 100 100 300 300 0 0 0>, <&key_physical_attrs 100 100 400 300 0 0 0>
+                , <&key_physical_attrs 100 100   0 400 0 0 0>, <&key_physical_attrs 100 100 100 400 0 0 0>, <&key_physical_attrs 100 100 200 400 0 0 0>, <&key_physical_attrs 100 100 300 400 0 0 0>, <&key_physical_attrs 100 100 400 400 0 0 0>
+                ;
+        };
+    };
+
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
         diode-direction = "col2row";
 
-        // 生のgpio番号ではなく、ZMK公式の安全なエイリアス(&xiao_d)を使用
+        // gpio番号ではなく、ZMK公式の安全なエイリアス(&xiao_d)を使用
         col-gpios
-            = <&xiao_d 9 GPIO_ACTIVE_HIGH>
-            , <&xiao_d 7 GPIO_ACTIVE_HIGH>
-            , <&xiao_d 6 GPIO_ACTIVE_HIGH>
-            , <&xiao_d 0 GPIO_ACTIVE_HIGH>
-            , <&xiao_d 1 GPIO_ACTIVE_HIGH>
+            = <&xiao_d 9 GPIO_ACTIVE_HIGH>  // col0
+            , <&xiao_d 7 GPIO_ACTIVE_HIGH>  // col1
+            , <&xiao_d 6 GPIO_ACTIVE_HIGH>  // col2
+            , <&xiao_d 0 GPIO_ACTIVE_HIGH>  // col3
+            , <&xiao_d 1 GPIO_ACTIVE_HIGH>  // col4
             ;
 
         row-gpios
-            = <&xiao_d 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&xiao_d 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&xiao_d 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&xiao_d 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&xiao_d 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            = <&xiao_d 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   // row0
+            , <&xiao_d 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   // row1
+            , <&xiao_d 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   // row2
+            , <&xiao_d 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   // row3
+            , <&xiao_d 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>   // row4
             ;
     };
 };
@@ -53,3 +76,44 @@
 &i2c1 { status = "disabled"; };
 &spi2 { status = "disabled"; };
 &uart0 { status = "disabled"; };
+
+
+////////////////////////////////////////////
+// LED (UNDERGLOW)
+////////////////////////////////////////////
+
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>;
+        };
+    };
+    spi3_sleep: spi3_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi3 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+    pinctrl-0 = <&spi3_default>;
+    pinctrl-1 = <&spi3_sleep>;
+    pinctrl-names = "default","sleep";
+    
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+
+        /* WS2812 */
+        chain-length = <4>;
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+        color-mapping = <LED_COLOR_ID_GREEN
+                         LED_COLOR_ID_RED
+                         LED_COLOR_ID_BLUE>;
+    };
+};
