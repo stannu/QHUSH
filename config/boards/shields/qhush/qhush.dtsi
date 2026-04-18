@@ -73,7 +73,7 @@
 &spi2 { status = "disabled"; };
 &uart0 { status = "disabled"; };
 
-// 6. LED設定 (SPI3を使用)
+// 6. LED設定
 &pinctrl {
     spi3_default: spi3_default {
         group1 {
