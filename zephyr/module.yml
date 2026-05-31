@@ -1,4 +1,0 @@
-name: QHUSH
-build:
-  settings:
-    board_root: config
