@@ -21,7 +21,7 @@
 include:
   - board: xiao_ble
     shield: qhush
-    snippet: studio-rpc-usb-uart
-    cmake-args: -DCONFIG_ZMK_STUDIO=y
+#    snippet: studio-rpc-usb-uart
+#    cmake-args: -DCONFIG_ZMK_STUDIO=y
   - board: xiao_ble
     shield: settings_reset
