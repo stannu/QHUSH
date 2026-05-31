@@ -16,24 +16,13 @@
 #define WIN_ETC  7
 
 / {
-    // ZMK Studioに5x5の物理レイアウトを認識させる設定
-    chosen {
-        zmk,physical-layout = &physical_layout0;
-    };
-
-    physical_layout0: physical_layout_0 {
-        compatible = "zmk,physical-layout";
-        display-name = "Default Layout";
-        transform = <&matrix_transform0>;
-    };
-
+    // 1. 【順番変更：最優先】まず先にマトリックス変換（形）を定義してシステムに教えます
     matrix_transform0: matrix_transform_0 {
         compatible = "zmk,matrix-transform";
         rows = <5>;
         columns = <5>;
-
+        
         #define M_RC(row, col) RC(row, col)
-
         map = <
             M_RC(0,0) M_RC(0,1) M_RC(0,2) M_RC(0,3) M_RC(0,4)
             M_RC(1,0) M_RC(1,1) M_RC(1,2) M_RC(1,3) M_RC(1,4)
@@ -41,19 +30,29 @@
             M_RC(3,0) M_RC(3,1) M_RC(3,2) M_RC(3,3) M_RC(3,4)
             M_RC(4,0) M_RC(4,1) M_RC(4,2) M_RC(4,3) M_RC(4,4)
         >;
-
         #undef M_RC
     };
-    
-    
-    // OS切替え用コンボ設定
+
+    // 2. 【順番変更】定義が済んだので、ここで安心してレイアウトに紐付けます
+    physical_layout0: physical_layout_0 {
+        compatible = "zmk,physical-layout";
+        display-name = "Default Layout";
+        transform = <&matrix_transform0>; // 上で定義したのでもうエラーになりません
+    };
+
+    // 3. ZMK Studioへ認識させる設定
+    chosen {
+        zmk,physical-layout = &physical_layout0;
+    };
+
+    // 4. OS切替え用コンボ設定
     combos {
         compatible = "zmk,combos";
 
         combo_os_toggle {
             timeout-ms = <50>;
-            key-positions = <0 4>; // 0番(BSPC)と4番(*)の同時押し
-            bindings = <&tog WIN_BASE>; // WIN_BASEレイヤーをオン/オフする
+            key-positions = <0 4>;
+            bindings = <&tog WIN_BASE>;
         };
     };
 };
