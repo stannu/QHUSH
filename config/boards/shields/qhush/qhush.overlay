@@ -16,6 +16,7 @@
     };
 
     // マトリックスの形 (5x5)
+    // ※overlay内で定義することで、.keymap側の修飾キーマクロと衝突せずにRC()が安全に使えます
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         columns = <5>;

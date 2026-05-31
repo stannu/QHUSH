@@ -16,42 +16,14 @@
 #define WIN_ETC  7
 
 / {
-    // 1. マトリックス変換定義（マクロを使わずダイレクトにマトリックス位置を指定）
-    transform0: transform_0 {
-        compatible = "zmk,matrix-transform";
-        rows = <5>;
-        columns = <5>;
-        
-        // ZMKシステムが解釈する生の行列配置（競合するキーワードが一切ないので絶対にエラーになりません）
-        map = <
-            0 1 2 3 4
-            5 6 7 8 9
-            10 11 12 13 14
-            15 16 17 18 19
-            20 21 22 23 24
-        >;
-    };
-
-    // 2. 物理レイアウトの定義
-    layout0: layout_0 {
-        compatible = "zmk,physical-layout";
-        display-name = "Default Layout";
-        transform = <&transform0>;
-    };
-
-    // 3. ZMK Studioへの登録
-    chosen {
-        zmk,physical-layout = &layout0;
-    };
-
-    // 4. OS切替え用コンボ設定
+    // OS切替え用コンボ設定
     combos {
         compatible = "zmk,combos";
 
         combo_os_toggle {
             timeout-ms = <50>;
-            key-positions = <0 4>;
-            bindings = <&tog WIN_BASE>;
+            key-positions = <0 4>; // 0番(BSPC)と4番(*)の同時押し
+            bindings = <&tog WIN_BASE>; // WIN_BASEレイヤーをオン/オフする
         };
     };
 };
