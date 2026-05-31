@@ -16,8 +16,8 @@
 #define WIN_ETC  7
 
 / {
-    // 1. 【順番変更：最優先】まず先にマトリックス変換（形）を定義してシステムに教えます
-    matrix_transform0: matrix_transform_0 {
+    // 1. マトリックス変換（形）の定義（名前の競合と認識エラーを防ぐため極限までシンプルに）
+    transform0: transform_0 {
         compatible = "zmk,matrix-transform";
         rows = <5>;
         columns = <5>;
@@ -33,16 +33,16 @@
         #undef M_RC
     };
 
-    // 2. 【順番変更】定義が済んだので、ここで安心してレイアウトに紐付けます
-    physical_layout0: physical_layout_0 {
+    // 2. 物理レイアウトの定義
+    layout0: layout_0 {
         compatible = "zmk,physical-layout";
         display-name = "Default Layout";
-        transform = <&matrix_transform0>; // 上で定義したのでもうエラーになりません
+        transform = <&transform0>; // 上の変換定義をしっかりと紐付け
     };
 
-    // 3. ZMK Studioへ認識させる設定
+    // 3. ZMK Studioへの登録
     chosen {
-        zmk,physical-layout = &physical_layout0;
+        zmk,physical-layout = &layout0;
     };
 
     // 4. OS切替え用コンボ設定
