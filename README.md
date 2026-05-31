@@ -2,13 +2,13 @@
 
 **5×5の格子配列に、すべての効率を凝縮する。**
 
-QHushは、Seeed Studio XIAO nRF52840を搭載した、ミニマルかつ高機能な25キーの一体型（非分割）無線メカニカルキーボード／マクロパッドです。コンパクトな5×5の格子配列（Ortholinear）の中に、洗練されたマルチOS対応のレイヤー設計と、最新のZMK Studioによるリアルタイムなキーマップカスタマイズ環境を融合させています。
+QHushは、Seeed Studio XIAO nRF52840を搭載した、ミニマルかつ高機能な25キーの一体型（非分割）無線メカニカルテンキーです。コンパクトな5×5の格子配列（Ortholinear）の中に、洗練されたマルチOS対応のレイヤー設計と、最新のZMK Studioによるリアルタイムなキーマップカスタマイズ環境を融合させています。
 
 ## Features
 * **Minimalist & Industrial Design:** 5×5の極限まで無駄を削ぎ落としたグリッド配置。インダストリアルな美学に基づいた、ミニマルで研ぎ澄まされたデザインです。
 * **Wireless Freedom (BLE):** Bluetooth LEによる完全ワイヤレス接続に対応。スマートなスリープ機能により待機電力を抑え、バッテリーライフを最大化します。
 * **MCU:** Seeed Studio XIAO nRF52840
-* **Controls:** 25 x Mechanical Switches (5×5 Matrix)
+* **Controls:** 25 x Mechanical LP Switches (5×5 Matrix)
 * **Underglow:** 4 x RGB LEDによる美しいアンダーグローを搭載。
 * **Firmware:** ZMK Firmware (最新の **ZMK Studio** による画面上でのリアルタイムキーマップ変更に完全対応)
 
