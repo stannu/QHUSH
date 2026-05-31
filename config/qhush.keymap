@@ -44,7 +44,8 @@
 
         #undef M_RC
     };
-
+    
+    
     // OS切替え用コンボ設定
     combos {
         compatible = "zmk,combos";
