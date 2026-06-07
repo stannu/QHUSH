@@ -3,24 +3,26 @@
 #include <dt-bindings/led/led.h>
 
 / {
+    /* システム全体への指示 */
     chosen {
         zmk,physical-layout = &default_layout;
         zmk,underglow = &led_strip;
         zmk,matrix-transform = &default_transform;
-        zmk,studio-storage = &storage;
+        
+        /* ZMK Studioのバリデーションを確実にパスさせるストレージ宣言 */
+        zmk,studio-storage = &studio_storage;
     };
 
-    // ZMK Studio用のストレージ領域定義
-    storage: storage {
+    /* 最新ZMK Studioが必須とするストレージノードの完全な定義 */
+    studio_storage: studio_storage {
         compatible = "zmk,studio-storage";
     };
 
-    // バッテリーチェック無効化
     vbatt: vbatt {
         status = "disabled";
     };
 
-    // マトリックスの形 (5x5)
+    /* 5x5 マトリックス変換 */
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         columns = <5>;
@@ -34,10 +36,9 @@
         >;
     };
 
-    // ZMK Studio用レイアウト定義
+    /* ZMK Studio用レイアウト物理座標定義 */
     physical_layouts {
         compatible = "zmk,physical-layouts";
-        
         default_layout: default_layout {
             compatible = "zmk,physical-layout";
             display-name = "Default Layout";
@@ -54,38 +55,38 @@
         };
     };
 
-    // キースイッチの配線
+    /* キースイッチ配線設定 */
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
         diode-direction = "col2row";
 
         col-gpios
-            = <&xiao_d 10 GPIO_ACTIVE_HIGH> // Col0 D9 (P1.14) ZMKでは10を指定
-            , <&xiao_d 7 GPIO_ACTIVE_HIGH> // Col1 D7 (P1.12)
-            , <&xiao_d 6 GPIO_ACTIVE_HIGH> // Col2 D6 (P1.11)
-            , <&xiao_d 0 GPIO_ACTIVE_HIGH> // Col3 D0 (P0.02)
-            , <&xiao_d 1 GPIO_ACTIVE_HIGH> // Col4 D1 (P0.03)
+            = <&xiao_d 10 GPIO_ACTIVE_HIGH> // Col0 (P1.14 = D9) ZMK規則の10を指定
+            , <&xiao_d  7 GPIO_ACTIVE_HIGH> // Col1 (P1.12 = D7)
+            , <&xiao_d  6 GPIO_ACTIVE_HIGH> // Col2 (P1.11 = D6)
+            , <&xiao_d  0 GPIO_ACTIVE_HIGH> // Col3 (P0.02 = D0)
+            , <&xiao_d  1 GPIO_ACTIVE_HIGH> // Col4 (P0.03 = D1)
             ;
 
         row-gpios
-            = <&xiao_d 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row0 D5 (P0.05)
-            , <&xiao_d 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row1 D8 (P1.13)
-            , <&xiao_d 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row2 D4 (P0.04)
-            , <&xiao_d 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row3 D3 (P0.29)
-            , <&xiao_d 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row4 D2 (P0.28)
+            = <&xiao_d  5 GPIO_ACTIVE_HIGH> // Row0 (P0.05 = D5)
+            , <&xiao_d  8 GPIO_ACTIVE_HIGH> // Row1 (P1.13 = D8)
+            , <&xiao_d  4 GPIO_ACTIVE_HIGH> // Row2 (P0.04 = D4)
+            , <&xiao_d  3 GPIO_ACTIVE_HIGH> // Row3 (P0.29 = D3)
+            , <&xiao_d  2 GPIO_ACTIVE_HIGH> // Row4 (P0.28 = D2)
             ;
     };
 };
 
-// 使用しないペリフェラルを無効化してピンを解放
+/* 未使用ペリフェラルの解放 */
 &i2c0 { status = "disabled"; };
 &i2c1 { status = "disabled"; };
 &spi2 { status = "disabled"; };
 &spi3 { status = "disabled"; };
 &uart0 { status = "disabled"; };
 
-// LED設定 (競合の少ないSPI1を使用)
+/* Underglow LED設定 (干渉を避けるためSPI1を使用) */
 &pinctrl {
     spi1_default: spi1_default {
         group1 {
