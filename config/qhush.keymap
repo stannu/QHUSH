@@ -16,6 +16,10 @@
 #define WIN_ETC  7
 
 / {
+    chosen {
+        zmk,matrix-transform = &default_transform;
+    };
+
     // OS切替え用コンボ設定
     combos {
         compatible = "zmk,combos";
