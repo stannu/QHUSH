@@ -3,7 +3,6 @@
 #include <dt-bindings/led/led.h>
 
 / {
-    // 【最重要】システム全体への指示
     chosen {
         zmk,physical-layout = &default_layout;
         zmk,underglow = &led_strip;
@@ -16,7 +15,6 @@
     };
 
     // マトリックスの形 (5x5)
-    // ※overlay内で定義することで、.keymap側の修飾キーマクロと衝突せずにRC()が安全に使えます
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         columns = <5>;
@@ -30,7 +28,7 @@
         >;
     };
 
-    // ZMK Studio用レイアウト定義（ラッパー込み）
+    // ZMK Studio用レイアウト定義
     physical_layouts {
         compatible = "zmk,physical-layouts";
         
@@ -57,37 +55,38 @@
         diode-direction = "col2row";
 
         col-gpios
-            = <&xiao_d 9 GPIO_ACTIVE_HIGH> // Col0
-            , <&xiao_d 7 GPIO_ACTIVE_HIGH> // Col1
-            , <&xiao_d 6 GPIO_ACTIVE_HIGH> // Col2
-            , <&xiao_d 0 GPIO_ACTIVE_HIGH> // Col3
-            , <&xiao_d 1 GPIO_ACTIVE_HIGH> // Col4
+            = <&xiao_d 10 GPIO_ACTIVE_HIGH> // Col0 D9 (P1.14) ZMKでは10を指定
+            , <&xiao_d 7 GPIO_ACTIVE_HIGH> // Col1 D7 (P1.12)
+            , <&xiao_d 6 GPIO_ACTIVE_HIGH> // Col2 D6 (P1.11)
+            , <&xiao_d 0 GPIO_ACTIVE_HIGH> // Col3 D0 (P0.02)
+            , <&xiao_d 1 GPIO_ACTIVE_HIGH> // Col4 D1 (P0.03)
             ;
 
         row-gpios
-            = <&xiao_d 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row0
-            , <&xiao_d 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row1
-            , <&xiao_d 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row2
-            , <&xiao_d 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row3
-            , <&xiao_d 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row4
+            = <&xiao_d 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row0 D5 (P0.05)
+            , <&xiao_d 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row1 D8 (P1.13)
+            , <&xiao_d 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row2 D4 (P0.04)
+            , <&xiao_d 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row3 D3 (P0.29)
+            , <&xiao_d 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row4 D2 (P0.28)
             ;
     };
 };
 
-// ピンの完全解放
+// 使用しないペリフェラルを無効化してピンを解放
 &i2c0 { status = "disabled"; };
 &i2c1 { status = "disabled"; };
 &spi2 { status = "disabled"; };
+&spi3 { status = "disabled"; };
 &uart0 { status = "disabled"; };
 
-// LED設定 (SPI3)
+// LED設定 (競合の少ないSPI1を使用)
 &pinctrl {
-    spi3_default: spi3_default {
+    spi1_default: spi1_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>;
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>; // D10 (P1.15)
         };
     };
-    spi3_sleep: spi3_sleep {
+    spi1_sleep: spi1_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>;
             low-power-enable;
@@ -95,11 +94,11 @@
     };
 };
 
-&spi3 {
+&spi1 {
     compatible = "nordic,nrf-spim";
     status = "okay";
-    pinctrl-0 = <&spi3_default>;
-    pinctrl-1 = <&spi3_sleep>;
+    pinctrl-0 = <&spi1_default>;
+    pinctrl-1 = <&spi1_sleep>;
     pinctrl-names = "default","sleep";
     
     led_strip: ws2812@0 {
