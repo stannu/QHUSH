@@ -7,6 +7,12 @@
         zmk,physical-layout = &default_layout;
         zmk,underglow = &led_strip;
         zmk,matrix-transform = &default_transform;
+        zmk,studio-storage = &storage;
+    };
+
+    // ZMK Studio用のストレージ領域定義
+    storage: storage {
+        compatible = "zmk,studio-storage";
     };
 
     // バッテリーチェック無効化
