@@ -46,14 +46,15 @@
                 ;
         };
     };
-
     /* キースイッチ配線設定（★正常化版★） */
+    /*
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
         diode-direction = "col2row";
-
+    */
         /* 回路図通りのストレートなピンアサインに完全修正 */
+     /*
         col-gpios
             = <&xiao_d  9 GPIO_ACTIVE_HIGH> // Col0 -> 回路図のD9 (P1.14)
             , <&xiao_d  7 GPIO_ACTIVE_HIGH> // Col1 -> D7 (P1.12)
@@ -68,6 +69,29 @@
             , <&xiao_d  4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row2 -> D4 (P0.04)
             , <&xiao_d  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row3 -> D3 (P0.29)
             , <&xiao_d  2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row4 -> D2 (P0.28)
+            ;
+    };
+    */
+    /* キースイッチ配線設定（★限界突破・生ポート＆Active Low化安定版★） */
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        wakeup-source;
+        diode-direction = "row2col"; // ★論理を反転させ、Rowを出力、Colを入力に変更
+
+        col-gpios
+            = <&gpio1 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Col0 -> P1.14 (旧D9)
+            , <&gpio1 12 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Col1 -> P1.12 (旧D7)
+            , <&gpio1 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Col2 -> P1.11 (旧D6)
+            , <&gpio0  2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Col3 -> P0.02 (旧D0)
+            , <&gpio0  3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Col4 -> P0.03 (旧D1)
+            ;
+
+        row-gpios
+            = <&gpio0  5 GPIO_ACTIVE_LOW> // Row0 -> P0.05 (旧D5)
+            , <&gpio1 13 GPIO_ACTIVE_LOW> // Row1 -> P1.13 (旧D8)
+            , <&gpio0  4 GPIO_ACTIVE_LOW> // Row2 -> P0.04 (旧D4)
+            , <&gpio0 29 GPIO_ACTIVE_LOW> // Row3 -> P0.29 (旧D3)
+            , <&gpio0 28 GPIO_ACTIVE_LOW> // Row4 -> P0.28 (旧D2)
             ;
     };
 };
