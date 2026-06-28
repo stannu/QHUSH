@@ -75,30 +75,34 @@
 /* 未使用ペリフェラルの解放 */
 &i2c0 { status = "disabled"; };
 &i2c1 { status = "disabled"; };
+&spi1 { status = "disabled"; };
 &spi2 { status = "disabled"; };
-&spi3 { status = "disabled"; };
 &uart0 { status = "disabled"; };
 
 /* Underglow LED設定 (D10ピンを安全に排他制御) */
 &pinctrl {
-    spi1_default: spi1_default {
+    spi3_default: spi3_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>; // D10 (P1.15)
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>, // D10 (P1.15)
+                    <NRF_PSEL(SPIM_SCK, 0, 9)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 10)>;
         };
     };
-    spi1_sleep: spi1_sleep {
+    spi3_sleep: spi3_sleep {
         group1 {
-            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>;
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 15)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 9)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 10)>;
             low-power-enable;
         };
     };
 };
 
-&spi1 {
+&spi3 {
     compatible = "nordic,nrf-spim";
     status = "okay";
-    pinctrl-0 = <&spi1_default>;
-    pinctrl-1 = <&spi1_sleep>;
+    pinctrl-0 = <&spi3_default>;
+    pinctrl-1 = <&spi3_sleep>;
     pinctrl-names = "default","sleep";
     
     led_strip: ws2812@0 {
